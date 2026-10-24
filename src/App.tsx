@@ -83,6 +83,7 @@ export function App() {
   const [isBreakGlassOpen, setIsBreakGlassOpen] = useState<boolean>(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
   const [isPatientPortal, setIsPatientPortal] = useState<boolean>(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
 
   const handleLogEmergencyAccess = (log: BreakGlassLog) => {
     console.log('Break-glass emergency logged:', log);
@@ -175,11 +176,21 @@ export function App() {
       <Sidebar
         activeModuleId={activeModuleId}
         currentRole={currentRole}
+        isMobileOpen={isMobileNavOpen}
+        onCloseMobile={() => setIsMobileNavOpen(false)}
         onSelectModule={(id) => {
           setActiveModuleId(id);
           setIsPatientPortal(id === 40);
         }}
       />
+
+      {/* Backdrop overlay for mobile drawer */}
+      {isMobileNavOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setIsMobileNavOpen(false)}
+        />
+      )}
 
       {/* Main Content Area */}
       <div className="main-wrapper">
@@ -194,6 +205,7 @@ export function App() {
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
           onTogglePatientPortal={handleTogglePatientPortal}
           isPatientPortal={isPatientPortal}
+          onToggleMobileNav={() => setIsMobileNavOpen(!isMobileNavOpen)}
           onSelectModule={(id) => {
             setActiveModuleId(id);
             setIsPatientPortal(id === 40);

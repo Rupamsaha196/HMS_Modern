@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Menu,
   ShieldAlert,
   Building2,
   UserCheck,
@@ -26,6 +27,7 @@ interface HeaderProps {
   isPatientPortal: boolean;
   onSelectModule: (moduleId: number) => void;
   activeModuleId: number;
+  onToggleMobileNav?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -40,7 +42,8 @@ export const Header: React.FC<HeaderProps> = ({
   onTogglePatientPortal,
   isPatientPortal,
   onSelectModule,
-  activeModuleId
+  activeModuleId,
+  onToggleMobileNav
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showRoleMenu, setShowRoleMenu] = useState(false);
@@ -89,9 +92,19 @@ export const Header: React.FC<HeaderProps> = ({
       flexShrink: 0
     }}>
 
+      {/* Mobile Hamburger Menu Toggle */}
+      <button
+        className="mobile-menu-btn"
+        onClick={onToggleMobileNav}
+        aria-label="Toggle navigation drawer"
+        title="Open Navigation"
+      >
+        <Menu size={20} />
+      </button>
+
       {/* LEFT: Active module breadcrumb */}
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0, flex: '0 1 200px' }}>
-        <div style={{ fontSize: '0.62rem', color: 'var(--text-light)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      <div className="header-breadcrumb" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0 }}>
+        <div className="header-breadcrumb-category" style={{ fontSize: '0.62rem', color: 'var(--text-light)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {currentModule?.category || 'Module'} · Pt {activeModuleId}
         </div>
         <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--royal-950)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.2 }}>
@@ -100,10 +113,10 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Divider */}
-      <div style={{ width: '1px', height: '26px', background: 'var(--border-light)', flexShrink: 0 }} />
+      <div className="header-divider" style={{ width: '1px', height: '26px', background: 'var(--border-light)', flexShrink: 0 }} />
 
       {/* Branch selector */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+      <div className="header-branch" style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
         <Building2 size={13} color="var(--royal-600)" />
         <select
           value={currentBranch}
@@ -132,6 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* SEARCH */}
       <div
+        className="header-search"
         onClick={onOpenCommandPalette}
         style={{
           display: 'flex', alignItems: 'center', gap: '5px',
@@ -150,10 +164,11 @@ export const Header: React.FC<HeaderProps> = ({
       <div style={{ flex: 1 }} />
 
       {/* RIGHT CONTROLS — fixed, no overflow */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+      <div className="header-right-controls" style={{ display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
 
         {/* ABDM */}
         <button
+          className="header-abdm"
           onClick={() => onSelectModule(28)}
           style={{
             display: 'flex', alignItems: 'center', gap: '3px',
@@ -170,6 +185,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Break-Glass */}
         <button
+          className="header-breakglass"
           onClick={onOpenBreakGlass}
           style={{
             display: 'flex', alignItems: 'center', gap: '3px',
@@ -187,7 +203,7 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
 
         {/* Role dropdown */}
-        <div style={{ position: 'relative', flexShrink: 0 }}>
+        <div className="header-role" style={{ position: 'relative', flexShrink: 0 }}>
           <button
             onClick={() => { setShowRoleMenu(!showRoleMenu); setShowNotifications(false); }}
             style={{
@@ -236,7 +252,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Language */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
+        <div className="header-lang" style={{ display: 'flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
           <Globe size={11} color="var(--text-muted)" />
           <select
             value={currentLang}
@@ -294,6 +310,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Patient Portal */}
         <button
+          className="header-portal"
           onClick={onTogglePatientPortal}
           style={{
             display: 'flex', alignItems: 'center', gap: '3px',

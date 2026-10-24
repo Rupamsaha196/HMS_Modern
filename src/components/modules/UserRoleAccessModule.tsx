@@ -108,13 +108,13 @@ export const UserRoleAccessModule: React.FC = () => {
       id: `usr-${Date.now()}`,
       name: newUserName.trim(),
       email: newUserEmail.trim(),
+      phone: '+91 98450 12345',
       role: newUserRole,
       department: newUserDept,
-      branchId: 'br-1',
+      branch: 'Apex Main Hospital',
       hprId: newUserHpr.trim() || undefined,
       hasDSC: true,
-      isActive: true,
-      permissions: permissions
+      status: 'Active'
     };
 
     setUsers(prev => [newUser, ...prev]);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  X,
   LayoutDashboard,
   Users,
   Database,
@@ -139,11 +140,26 @@ interface SidebarProps {
   activeModuleId: number;
   onSelectModule: (id: number) => void;
   currentRole: UserRole;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeModuleId, onSelectModule, currentRole }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  activeModuleId,
+  onSelectModule,
+  currentRole,
+  isMobileOpen = false,
+  onCloseMobile
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+
+  const handleModuleClick = (id: number) => {
+    onSelectModule(id);
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+  };
 
   const categories = [
     'Admin & Governance',
@@ -188,22 +204,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModuleId, onSelectModule
   const badge = getRoleBadge(currentRole);
 
   return (
-    <aside style={{
-      width: 'var(--sidebar-width)',
-      height: '100vh',
-      background: 'linear-gradient(180deg, #060f28 0%, #0a1f56 50%, #0f2a7a 100%)',
-      color: '#ffffff',
-      display: 'flex',
-      flexDirection: 'column',
-      flexShrink: 0,
-      boxShadow: '4px 0 20px rgba(5, 15, 45, 0.4)',
-      zIndex: 100,
-      userSelect: 'none',
-      overflow: 'hidden'
-    }}>
+    <aside
+      className={`app-sidebar ${isMobileOpen ? 'mobile-open' : ''}`}
+      style={{
+        width: 'var(--sidebar-width)',
+        height: '100vh',
+        background: 'linear-gradient(180deg, #060f28 0%, #0a1f56 50%, #0f2a7a 100%)',
+        color: '#ffffff',
+        display: 'flex',
+        flexDirection: 'column',
+        flexShrink: 0,
+        boxShadow: '4px 0 20px rgba(5, 15, 45, 0.4)',
+        zIndex: 100,
+        userSelect: 'none',
+        overflow: 'hidden'
+      }}
+    >
       {/* Brand – flush to top, zero gap */}
       <div
-        onClick={() => onSelectModule(2)}
         style={{
           height: 'var(--header-height)',
           padding: '0 13px',
@@ -212,31 +230,48 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModuleId, onSelectModule
           gap: '9px',
           background: 'rgba(0,0,0,0.3)',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
-          cursor: 'pointer',
           flexShrink: 0
         }}
       >
-        <div style={{
-          width: '32px',
-          height: '32px',
-          background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontWeight: 900,
-          fontSize: '1.05rem',
-          boxShadow: '0 2px 8px rgba(37,99,235,0.5)',
-          flexShrink: 0
-        }}>+</div>
-        <div style={{ minWidth: 0, flex: 1 }}>
+        <div
+          onClick={() => handleModuleClick(2)}
+          style={{
+            width: '32px',
+            height: '32px',
+            background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontWeight: 900,
+            fontSize: '1.05rem',
+            boxShadow: '0 2px 8px rgba(37,99,235,0.5)',
+            flexShrink: 0,
+            cursor: 'pointer'
+          }}
+        >+</div>
+        <div
+          onClick={() => handleModuleClick(2)}
+          style={{ minWidth: 0, flex: 1, cursor: 'pointer' }}
+        >
           <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '5px' }}>
             MedPulse <span style={{ color: '#60a5fa', fontWeight: 600, fontSize: '0.78rem' }}>HMS</span>
             <span style={{ fontSize: '0.57rem', padding: '1px 4px', borderRadius: '4px', background: 'rgba(59,130,246,0.3)', color: '#bfdbfe', fontWeight: 700, marginLeft: '2px' }}>v3.0</span>
           </div>
           <div style={{ fontSize: '0.62rem', color: '#93c5fd', opacity: 0.85 }}>Enterprise Healthcare Suite</div>
         </div>
+
+        {onCloseMobile && (
+          <button
+            className="sidebar-close-btn"
+            onClick={onCloseMobile}
+            aria-label="Close navigation drawer"
+            title="Close navigation"
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       {/* Role indicator */}
@@ -303,7 +338,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModuleId, onSelectModule
             <div style={{ fontSize: '0.63rem', color: '#7dd3fc', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '4px 10px 5px', fontWeight: 700 }}>
               Results ({filteredModules.length})
             </div>
-            {filteredModules.map(m => renderModuleItem(m, activeModuleId, onSelectModule))}
+            {filteredModules.map(m => renderModuleItem(m, activeModuleId, handleModuleClick))}
           </div>
         ) : (
           categories.map(cat => {
@@ -337,7 +372,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModuleId, onSelectModule
 
                 {!isCollapsed && (
                   <div>
-                    {catModules.map(m => renderModuleItem(m, activeModuleId, onSelectModule))}
+                    {catModules.map(m => renderModuleItem(m, activeModuleId, handleModuleClick))}
                   </div>
                 )}
               </div>
