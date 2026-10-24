@@ -103,18 +103,28 @@ export const Header: React.FC<HeaderProps> = ({
       <div style={{ width: '1px', height: '26px', background: 'var(--border-light)', flexShrink: 0 }} />
 
       {/* Branch selector */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
-        <Building2 size={12} color="var(--royal-600)" />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+        <Building2 size={13} color="var(--royal-600)" />
         <select
           value={currentBranch}
           onChange={(e) => onBranchChange(e.target.value)}
-          style={{ border: 'none', background: 'transparent', fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-secondary)', cursor: 'pointer', outline: 'none', maxWidth: '85px' }}
+          style={{
+            border: 'none',
+            background: 'transparent',
+            fontSize: '0.74rem',
+            fontWeight: 600,
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            outline: 'none',
+            maxWidth: '130px',
+            textOverflow: 'ellipsis'
+          }}
         >
           {HOSPITAL_INFO.branches.map(b => (
             <option key={b.id} value={b.name}>{b.name.split(' (')[0].replace('MedPulse ', '')}</option>
           ))}
         </select>
-        <ChevronDown size={10} color="var(--text-muted)" />
+        <ChevronDown size={11} color="var(--text-muted)" />
       </div>
 
       {/* Grow spacer */}
