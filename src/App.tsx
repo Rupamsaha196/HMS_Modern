@@ -8,6 +8,8 @@ import { UserRole, BreakGlassLog } from './types/hms';
 
 const ROLE_DEFAULT_MODULE: Record<UserRole, number> = {
   'Super Admin': 2,            // Executive Dashboard
+  'Hospital Admin': 2,         // Executive Dashboard
+  'Branch Admin': 4,           // Multi-Branch Management
   'Doctor': 8,                 // OPD & E-Prescription
   'Nurse': 13,                 // Nursing Station & e-MAR
   'Receptionist': 5,           // Patient Registration
